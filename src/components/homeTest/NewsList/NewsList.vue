@@ -2,22 +2,21 @@
   <div class="news">
     <div class="newList">
       <ul>
-        <li v-for="(item, index) in news" :key="index">
-          <a href="#">
-            <div class="new_img">
-              <img :src="item.imgUrl"/>
-            </div>
-            <div class="content">
-              <p class="title">{{ item.title }}</p>
-              <div class="news-desc">
-                <p class="summary">{{ item.describe }}</p>
-                <p>
-                  <span class="praise">点赞数：{{ item.click }}</span>
-                  <span class="time">发表时间：{{ item.createTime }}</span>
-                </p>
-              </div>
-            </div>
-          </a>
+        <li v-for="(item, index) in news" :key="index" class="" @click="addClick(item)">
+          <van-grid :gutter="0" :border="false" :column-num="1">
+            <van-grid-item>
+              <van-card
+                :num="item.click + '点击'"
+                :price="item.createTime | dateFormat"
+                :desc="item.content"
+                :title="item.title"
+                :thumb="item.imgUrl"
+                currency=""
+                @click="routeTo(item)"
+              />
+            </van-grid-item>
+          </van-grid>
+
         </li>
       </ul>
     </div>
@@ -25,99 +24,73 @@
 </template>
 
 <script>
+import {Toast} from "mint-ui";
+
 export default {
   name: "newsList",
   data() {
     return {
       news: []
     }
-  }
-  ,
+  },
   created() {
     this.$axios.get("/api/news/list")
       .then(res => {
-        console.log(res.data)
-        this.news = res.data.datas
-        console.log("news", this.news)
+        if (res.data.result == 1) {
+          console.log(res.data)
+          this.news = res.data.datas
+          console.log("news", this.news)
+        } else {
+          Toast('添加失败')
+        }
+
       })
       .catch(err => {
         console.log('新闻列表数据异常', err)
       })
+  },
+  methods: {
+    addClick(item) {
+      this.$axios.get("/api/news/addClick/" + item.id)
+        .then(res => {
+          if (res.data.result == 1) {
+            console.log(res.data)
+            this.news = res.data.datas
+            console.log("news", this.news)
+          } else {
+            Toast('添加失败')
+          }
+        })
+        .catch(err => {
+          console.log('addClick异常', err)
+        })
+    },
+    routeTo(item) {
+      this.$router.push({path: "/home/newsDetail/" + item.id})
+    }
   }
 }
 </script>
 
 <style scoped>
-.news {
-  padding-bottom: 120px;
-  width: 100%;
+.mui-table-view li h1 {
+  font-size: 14px;
+  font-weight: bold;
 }
 
-.newList {
-  width: 100%;
+.mui-table-view li h2 {
   font-size: 12px;
 }
 
-.newList ul li {
-  position: relative;
-  border-bottom: 1px solid #CCCCCC;
+/deep/ .van-card__desc {
+  width: 217px;
 }
 
-.newList ul li a {
-  /*display: block;*/
+/deep/ .van-grid-item__content {
+  padding: 5px;
+}
+
+/deep/ .van-grid {
   width: 100%;
-  height: 120px;
-  color: #808080;
-  display: flex;
-  text-decoration: none;
-}
-
-.new_img {
-  width: 30%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.newList ul li a img {
-  box-sizing: border-box;
-  width: 100%;
-  height: 80px;
-  padding: 0 10px;
-}
-
-.newList ul li a .content {
-  width: 70%;
-  box-sizing: border-box;
-  padding: 0 10px;
-}
-
-.content .title {
-  font-size: 15px;
-  display: inline-block;
-  color: #131f3c;
-  letter-spacing: 0;
-  padding-bottom: 7px;
-  font-family: PingFangSC-Regular;
-  margin-top: 10px;
-}
-
-.newList ul li a .content .summary {
-  width: 100%;
-  overflow: hidden;
-  height: 30px;
-}
-
-.news-desc span {
-  color: #ff6700;
-}
-
-.summary {
-  padding: 5px 0;
-}
-
-.time {
-  display: block;
 }
 </style>

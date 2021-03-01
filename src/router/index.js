@@ -18,6 +18,12 @@ import HeaderBox from "../components/homeTest/ClassicLayout/HeaderBox";
 import LeftBox from "../components/homeTest/ClassicLayout/LeftBox";
 import MainBox from "../components/homeTest/ClassicLayout/MainBox";
 import NameBind from "../components/homeTest/NameBind/NameBind";
+import NewsDetail from "../components/homeTest/NewsList/NewsDetail";
+import PhotoList from "../components/photoList/PhotoList";
+import TestPage from "../components/TestPage/TestPage";
+import TestLoad from "../components/TestPage/TestLoad";
+import GoodsList from "../components/GoodsList/GoodsList";
+import GoodDetail from "../components/GoodsList/GoodDetail";
 
 Vue.use(Router)
 
@@ -26,55 +32,97 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        showBottomTabBar: true
+      }
     },
     {
       path: '/vip',
       name: 'vip',
-      component: Vip
+      component: Vip,
+      meta: {
+        showBottomTabBar: true
+      }
     },
     {
       path: '/cart',
       name: 'cart',
-      component: Cart
+      component: Cart,
+      meta: {
+        showBottomTabBar: true
+      }
     },
     {
       path: '/search',
       name: 'search',
-      component: Search
+      component: Search,
+      meta: {
+        showBottomTabBar: true
+      }
     },
     {
-      path: '/news',
+      path: '/home/newsList',
       name: 'newsList',
       component: NewsList
     },
     {
-      path: '/marquee',
+      path: '/home/newsDetail/:id',
+      name: 'NewsDetail',
+      component: NewsDetail
+    },
+    {
+      path: '/home/photoList',
+      name: 'photoList',
+      component: PhotoList
+    },
+    {
+      path: '/home/goodsList',
+      name: 'goodsList',
+      component: GoodsList
+    },
+    {
+      path: '/home/goodDetail/:id',
+      name: 'goodDetail',
+      component: GoodDetail
+    },
+    {
+      path: '/home/marquee',
       name: 'marquee',
       component: Marquee
     },
     {
-      path: '/brand/list',
+      path: '/home/brand/list',
       name: 'brandList',
       component: BrandList
     },
     {
-      path: '/brand/list/request',
+      path: '/home/testPage',
+      name: 'TestPage',
+      component: TestPage
+    },
+    {
+      path: '/home/testLoad',
+      name: 'testLoad',
+      component: TestLoad
+    },
+    {
+      path: '/home/brand/list/request',
       name: 'brandListRequest',
       component: BrandListRequest
     },
     {
-      path: '/cartoon',
+      path: '/home/cartoon',
       name: 'cartoon',
       component: Cartoon
     },
     {
-      path: '/comment',
+      path: '/home/comment',
       name: 'comment',
       component: Comment
     },
     {
-      path: '/account',
+      path: '/home/account',
       name: 'account',
       component: Account,
       children: [
@@ -91,7 +139,7 @@ export default new Router({
       ]
     },
     {
-      path: '/classic/layout',
+      path: '/home/classic/layout',
       component: ClassicLayout,
       children: [
         {
@@ -106,7 +154,7 @@ export default new Router({
       ]
     },
     {
-      path: '/name/bind',
+      path: '/home/name/bind',
       name: 'nameBind',
       component: NameBind
     },

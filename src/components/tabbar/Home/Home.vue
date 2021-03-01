@@ -1,11 +1,11 @@
 <template>
   <div id="home">
     <!--  轮播图  -->
-    <mt-swipe :auto="4000" style="height: 200px" class="swiper">
-      <mt-swipe-item v-for="(item, index) in imgs" :key="index">
-        <img :src="item.imgUrl"/>
-      </mt-swipe-item>
-    </mt-swipe>
+    <van-swipe :autoplay="3000">
+      <van-swipe-item v-for="(item, index) in imgs" :key="index">
+        <img v-lazy="item.imgUrl" style="height: 200px;max-width: 100%"/>
+      </van-swipe-item>
+    </van-swipe>
 
     <div class="list">
       <ul>
@@ -29,11 +29,12 @@ import src3 from '../../../assets/1.png'
 import src4 from '../../../assets/1.png'
 import src5 from '../../../assets/1.png'
 import src6 from '../../../assets/1.png'
+import {Toast} from "mint-ui";
 
 var grids = [
   {id: 19, src: src1, title: '新闻资讯', router: {name: 'newsList'}},
-  {id: 20, src: src2, title: '图片分享', router: {name: 'marquee'}},
-  {id: 21, src: src3, title: '商品购买', router: {name: 'newsList'}},
+  {id: 20, src: src2, title: '图片分享', router: {name: 'photoList'}},
+  {id: 21, src: src3, title: '商品购买', router: {name: 'goodsList'}},
   {id: 22, src: src4, title: '留言反馈', router: {name: 'comment'}},
   {id: 23, src: src5, title: '视频专区', router: {name: 'newsList'}},
   {id: 24, src: src6, title: '联系我们', router: {name: 'newsList'}},
@@ -75,9 +76,13 @@ export default {
   created() {
     this.$axios.get('/api/banner/list')
       .then(res => {
-        console.log(res.data)
-        this.imgs = res.data.datas
-        console.log("imgs", this.imgs)
+        if (res.data.result == 1) {
+          console.log(res.data)
+          this.imgs = res.data.datas
+          console.log("imgs", this.imgs)
+        } else {
+          Toast('获取失败')
+        }
       })
       .catch(err => {
         console.log('轮播图数据异常', err)
@@ -90,11 +95,6 @@ export default {
 * {
   padding: 0;
   margin: 0;
-}
-
-.swiper img {
-  width: 100%;
-  height: 200px;
 }
 
 .list {
@@ -124,7 +124,13 @@ export default {
 .list ul li a img {
   width: 50px;
 }
+
 body {
   background-color: #fff;
+}
+/deep/ .van-swipe-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
